@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome to Flask Chat</h2>
+        <form method="POST">
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+            <input type="text" name="name" placeholder="Your name" value="{{ name }}" required>
+            <input type="text" name="code" placeholder="Room Code (if joining)">
+            <div class="buttons">
+                <button type="submit" name="join" value="true">Join Room</button>
+                <button type="submit" name="create" value="true">Create Room</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

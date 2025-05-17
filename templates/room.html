@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Room {{ code }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="chat-container">
+        <h2>Room: {{ code }}</h2>
+        <div id="messages">
+            {% for msg in messages %}
+                <div><strong>{{ msg.name }}</strong>: {{ msg.message }} <span class="time">{{ msg.timestamp }}</span></div>
+            {% endfor %}
+        </div>
+        <input id="message" type="text" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script type="text/javascript">
+        var socket = io();
+        var input = document.getElementById("message");
+        var messagesDiv = document.getElementById("messages");
+
+        socket.on("message", function(data) {
+            var content = `<div><strong>${data.name}</strong>: ${data.message} <span class="time">${data.timestamp || ''}</span></div>`;
+            messagesDiv.innerHTML += content;
+        });
+
+        function sendMessage() {
+            if (input.value.trim() !== "") {
+                socket.emit("message", { data: input.value });
+                input.value = "";
+            }
+        }
+
+        input.addEventListener("keyup", function(e) {
+            if (e.key === "Enter") sendMessage();
+        });
+    </script>
+</body>
+</html>
